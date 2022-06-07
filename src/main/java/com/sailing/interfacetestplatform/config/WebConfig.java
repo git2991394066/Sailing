@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @auther:张启航Sailling
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
  * @description:全局MVC特性配置
  **/
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer{
     @Autowired
     AuthenticationInterceptor authenticationInterceptor;
 

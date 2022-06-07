@@ -5,6 +5,7 @@ import com.sailing.interfacetestplatform.annotation.UserRight;
 import com.sailing.interfacetestplatform.dto.common.ResponseData;
 import com.sailing.interfacetestplatform.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @createDate:2022/6/7/0007 23:49:29
  * @description:身份验证拦截器
  **/
+@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
     SessionUtil sessionUtil;

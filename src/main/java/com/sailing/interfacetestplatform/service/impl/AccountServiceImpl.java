@@ -14,6 +14,7 @@ import com.sailing.interfacetestplatform.util.PasswordUtil;
 import com.sailing.interfacetestplatform.util.SessionUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
  * @createDate:2022/6/7/0007 22:47:07
  * @description:账户服务
  **/
+@Service
 public class AccountServiceImpl extends ServiceImpl<UserMapper, UserEntity> implements AccountService {
     @Autowired
     SessionUtil sessionUtil;
