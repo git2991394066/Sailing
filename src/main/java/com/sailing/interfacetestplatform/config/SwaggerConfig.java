@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 23:47:10
+ * @createDate:2022/6/8/0008 17:01:34
  * @description:Swagger配置
  **/
 @Configuration
@@ -50,3 +50,4 @@ public class SwaggerConfig {
                 .build();
     }
 }
+

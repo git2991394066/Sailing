@@ -5,7 +5,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 23:46:35
+ * @createDate:2022/6/8/0008 17:11:54
  * @description:将会话托管到redis，在分布式部署时，实现多负载共享会话信息
  **/
 @Configuration

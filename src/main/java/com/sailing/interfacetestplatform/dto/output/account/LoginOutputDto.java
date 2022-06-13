@@ -16,4 +16,6 @@ public class LoginOutputDto implements Serializable {
     private String username;
     private String name;
     private List<String> roles;
+
+    private String token;
 }

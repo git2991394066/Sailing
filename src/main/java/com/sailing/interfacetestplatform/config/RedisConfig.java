@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 23:45:05
+ * @createDate:2022/6/8/0008 17:10:09
  * @description:Redis配置
  **/
 @Configuration
@@ -35,7 +35,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Value("${spring.cache.redis.time-to-live}")
     Long  ttl;
     @Autowired
-    com.sailing.interfacetestplatform.config.CacheKeyProperties cacheKeyProperties;
+    CacheKeyProperties cacheKeyProperties;
     /**
      * 缓存管理器
      * @param redisTemplate
@@ -62,7 +62,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     /**
-     * retemplate相关配置
+     * redistemplate相关配置
      * @param factory
      * @return
      */

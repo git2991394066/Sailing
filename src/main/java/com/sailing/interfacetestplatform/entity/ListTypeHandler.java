@@ -15,21 +15,20 @@ import java.util.List;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 22:37:28
+ * @createDate:2022/6/8/0008 16:33:06
  * @description:List转JDBC字符串工具类
  **/
 @Slf4j
 //JDBC数据类型
 @MappedJdbcTypes(JdbcType.VARCHAR)
 @MappedTypes({List.class})          // java数据类型
-public class ListTypeHandler implements TypeHandler<List<String>> {
+public class ListTypeHandler implements TypeHandler<List<String>>{
     @Override
-    public void setParameter(PreparedStatement ps, int i,
-                             List <String> parameter, JdbcType jdbcType) throws SQLException {
-        String hobbys = dealListToOneStr(parameter);
-        ps.setString(i, hobbys);
-    }
+    public void setParameter(PreparedStatement preparedStatement, int i, List<String> strings, JdbcType jdbcType) throws SQLException {
+        String hobbys=dealListToOneStr(strings);
+        preparedStatement.setString(i,hobbys);
 
+    }
     /**
      * 集合拼接字符串
      *
@@ -37,32 +36,35 @@ public class ListTypeHandler implements TypeHandler<List<String>> {
      * @return
      */
     private String dealListToOneStr(List <String> parameter) {
-        if (parameter == null || parameter.size() <= 0)
+        if(parameter==null || parameter.size()<=0){
             return null;
-        String res = "";
-        for (int i = 0; i < parameter.size(); i++) {
-            if (i == parameter.size() - 1) {
+        }
+        String res="";
+        for(int i=0;i<parameter.size();i++){
+            if(i==parameter.size()-1){
                 res += parameter.get(i);
                 return res;
             }
-            res += parameter.get(i) + ",";
+            res+=parameter.get(i)+",";
         }
         return null;
     }
 
     @Override
-    public List <String> getResult(ResultSet rs, String columnName) throws SQLException {
-        return Arrays.asList(rs.getString(columnName).split(","));
+    public List<String> getResult(ResultSet resultSet, String s) throws SQLException {
+        return Arrays.asList(resultSet.getString(s).split(","));
     }
 
     @Override
-    public List <String> getResult(ResultSet rs, int columnIndex) throws SQLException {
-        return Arrays.asList(rs.getString(columnIndex).split(","));
+    public List<String> getResult(ResultSet resultSet, int i) throws SQLException {
+        return Arrays.asList(resultSet.getString(i).split(","));
     }
 
     @Override
-    public List <String> getResult(CallableStatement cs, int columnIndex) throws SQLException {
-        String hobbys = cs.getString(columnIndex);
-        return Arrays.asList(hobbys.split(","));
+    public List<String> getResult(CallableStatement callableStatement, int i) throws SQLException {
+//        String hobbys=callableStatement.getString(i);
+//        return Arrays.asList(hobbys.split(","));
+        return Arrays.asList(callableStatement.getString(i).split(","));
+
     }
 }

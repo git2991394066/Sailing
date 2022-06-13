@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 23:43:51
+ * @createDate:2022/6/8/0008 17:09:01
  * @description:Mybatis-plus配置
  **/
 @Configuration

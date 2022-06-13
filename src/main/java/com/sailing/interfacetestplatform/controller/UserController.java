@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 23:39:25
+ * @createDate:2022/6/8/0008 23:59:24
  * @description:用户控制器
  **/
 @Api(value = "用户接口",tags = {"用户接口"})
@@ -27,13 +27,11 @@ import java.util.List;
 public class UserController {
     @Autowired
     UserService userService;
-
     @ApiOperation(value = "分页查询",notes = "分页查询数据")
     @GetMapping("/")
     ResponseData<List<UserOutputDto>> query(@RequestParam(defaultValue = "1") Integer pageIndex, @RequestParam(defaultValue = "10") Integer pageSize, String username, String name){
         return userService.query(pageIndex,pageSize,username,name);
     }
-
     @ApiOperation(value = "查询所有数据",notes = "查询所有数据")
     @GetMapping("/queryAll")
     @UserRight(roles = {"admin","staff"})

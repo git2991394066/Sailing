@@ -3,6 +3,7 @@ package com.sailing.interfacetestplatform.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sailing.interfacetestplatform.dto.common.ResponseData;
 import com.sailing.interfacetestplatform.dto.input.account.LoginInputDto;
 import com.sailing.interfacetestplatform.dto.input.account.RegisterDto;
@@ -10,27 +11,27 @@ import com.sailing.interfacetestplatform.dto.output.account.LoginOutputDto;
 import com.sailing.interfacetestplatform.entity.UserEntity;
 import com.sailing.interfacetestplatform.mapper.UserMapper;
 import com.sailing.interfacetestplatform.service.AccountService;
+import com.sailing.interfacetestplatform.util.JWTUtil;
 import com.sailing.interfacetestplatform.util.PasswordUtil;
-import com.sailing.interfacetestplatform.util.SessionUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 22:47:07
- * @description:账户服务
+ * @createDate:2022/6/8/0008 23:52:35
+ * @description:
  **/
 @Service
 public class AccountServiceImpl extends ServiceImpl<UserMapper, UserEntity> implements AccountService {
-    @Autowired
-    SessionUtil sessionUtil;
+//    @Autowired
+//    SessionUtil sessionUtil;
     @Autowired
     ModelMapper modelMapper;
-
     @Override
     public ResponseData<LoginOutputDto> login(LoginInputDto inputDto) {
         ResponseData<LoginOutputDto> responseData;
@@ -60,10 +61,21 @@ public class AccountServiceImpl extends ServiceImpl<UserMapper, UserEntity> impl
 
             LoginOutputDto loginOutputDto = modelMapper.map(tbUser,LoginOutputDto.class);
 
-            //保存登录用户到会话
-            SessionUtil.CurrentUser currentUser = new SessionUtil.CurrentUser();
-            currentUser.setUserEntity(tbUser);
-            sessionUtil.setCurrentUser(currentUser);
+//            //保存登录用户到会话，使用会话形式
+//            SessionUtil.CurrentUser currentUser = new SessionUtil.CurrentUser();
+//            currentUser.setUserEntity(tbUser);
+//            sessionUtil.setCurrentUser(currentUser);
+
+            //【JWT】3、登录时返回token，使用JWT Token形式
+            //验证通过,返回token
+            HashMap<String, String> tokenInfos = new HashMap<>();
+            tokenInfos.put("status","success");
+            //将返回数据同时放到token中，用于认证与授权时使用token中的信息进行验证
+            tokenInfos.put("data",new ObjectMapper().writeValueAsString(loginOutputDto));
+
+            //添加token
+            String token = JWTUtil.generateToken(tokenInfos);
+            loginOutputDto.setToken(token);
 
             responseData = ResponseData.success(loginOutputDto);
         }catch (Exception ex){

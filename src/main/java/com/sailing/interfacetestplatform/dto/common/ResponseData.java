@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 22:56:24
+ * @createDate:2022/6/8/0008 18:55:56
  * @description:响应通用返回对象
  **/
 @Data
@@ -18,7 +18,6 @@ public class ResponseData<T> implements Serializable {
 
     public static final int SUCCESS_CODE=0;     //成功编码
     public static final int FAILURE_CODE=999;   //失败编码
-
     public static ResponseData success(){
         ResponseData responseData = new ResponseData();
         responseData.setCode(SUCCESS_CODE);
@@ -72,8 +71,6 @@ public class ResponseData<T> implements Serializable {
 
         return responseData;
     }
-
-
     public static ResponseData failure(){
         ResponseData responseData = new ResponseData();
         responseData.setCode(FAILURE_CODE);

@@ -13,7 +13,6 @@ import com.sailing.interfacetestplatform.entity.UserEntity;
 import com.sailing.interfacetestplatform.mapper.UserMapper;
 import com.sailing.interfacetestplatform.service.UserService;
 import com.sailing.interfacetestplatform.util.PasswordUtil;
-import com.sailing.interfacetestplatform.util.SessionUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,76 +26,65 @@ import java.util.stream.Collectors;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 22:44:18
- * @description:用户服务
+ * @createDate:2022/6/8/0008 18:37:55
+ * @description:
  **/
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> implements UserService {
     @Autowired
     ModelMapper modelMapper;
-
-    @Autowired
-    SessionUtil sessionUtil;
-
+//    @Autowired
+//    SessionUtil sessionUtil;
     //允许配置的角色
-    private final String[] ROLES = {"admin","staff"};
-
+    private final String[] ROLES={"admin","staff"};
     @Override
     public ResponseData<List<UserOutputDto>> query(Integer pageIndex, Integer pageSize, String username, String name) {
-        ResponseData<List<UserOutputDto>> responseData = new ResponseData<>();
-
-        try {
-            QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
-            if(username != null) {
-                queryWrapper.like("username", username);
+        ResponseData<List<UserOutputDto>> responseData=new ResponseData<>();
+        try{
+            QueryWrapper<UserEntity> queryWrapper=new QueryWrapper<>();
+            if(username!=null){
+                queryWrapper.like("username",username);
             }
-            if(name != null) {
-                queryWrapper.like("name", name);
+            if(name!=null){
+                queryWrapper.like("name",name);
             }
             queryWrapper.eq("is_delete",false); //只取没有删除的
-            queryWrapper.orderByDesc("username");
-            IPage<UserEntity> queryPage = new Page<>(pageIndex, pageSize);
-            queryPage = this.page(queryPage,queryWrapper);
-
+            IPage<UserEntity> queryPage=new Page<>(pageIndex,pageSize);
+            queryPage=this.page(queryPage,queryWrapper);
             //Entity转DTO
-            List<UserOutputDto> outputDtos =  queryPage.getRecords().stream().map(s->modelMapper.map(s,UserOutputDto.class)).collect(Collectors.toList());
-
+            List<UserOutputDto> outputDtos=queryPage.getRecords().stream().map(s->modelMapper.map(s,UserOutputDto.class)).collect(Collectors.toList());
             responseData.setData(outputDtos);
             responseData.setTotal(queryPage.getTotal());
             responseData.setCode(ResponseData.SUCCESS_CODE);
             responseData.setMessage("查询成功。");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            responseData = ResponseData.failure(ex.toString());
+        }catch(Exception exception){
+            exception.printStackTrace();
+            responseData=ResponseData.failure(exception.toString());
         }
-
         return responseData;
     }
 
     @Override
-    public ResponseData <List <UserOutputDto>> queryAll() {
+    public ResponseData<List<UserOutputDto>> queryAll() {
         ResponseData<List<UserOutputDto>> responseData;
-
-        try {
-            List <UserEntity> entities = this.list();
-            List <UserOutputDto> outputDtos = entities.stream().filter(s->s.getIsDelete()==false).sorted(Comparator.comparing(UserEntity::getName).reversed()) .map(s -> modelMapper.map(s, UserOutputDto.class)).collect(Collectors.toList());
-
+        try{
+            List <UserEntity> entities = this.list(); //this.list() 不带参数就是查询所有
+            List<UserOutputDto> outputDtos=entities.stream().filter(s->s.getIsDelete()==false).sorted(Comparator.comparing(UserEntity::getName).reversed()).map(s->modelMapper.map(s,UserOutputDto.class)).collect(Collectors.toList());
             responseData = ResponseData.success(outputDtos);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            responseData = ResponseData.failure(ex.toString());
+        }catch(Exception exception){
+            exception.printStackTrace();
+            responseData = ResponseData.failure(exception.toString());
         }
         return responseData;
     }
 
     @Override
-    public ResponseData <UserOutputDto> getById(Integer id) {
+    public ResponseData<UserOutputDto> getById(Integer id) {
         ResponseData<UserOutputDto> responseData;
         try {
             //验证
-            List<String> checkMsgs = new ArrayList<>();
-            //ID是否存在
-            UserEntity userEntity = super.getById(id);  //获取数据
+            List<String> checkMsgs=new ArrayList<>();
+            UserEntity userEntity=super.getById(id);
             if(userEntity == null){
                 checkMsgs.add(String.format("ID为[%s]的数据不存在",id));
             }
@@ -104,7 +92,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 responseData = new ResponseData<>();
                 responseData.setCode(1);
                 responseData.setMessage(checkMsgs.stream().collect(Collectors.joining(",")));
-
                 return responseData;
             }
 
@@ -120,14 +107,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     }
 
     @Override
-    public ResponseData <UserOutputDto> create(UserCreateInputDto inputDto) {
+    public ResponseData<UserOutputDto> create(UserCreateInputDto inputDto) {
         ResponseData<UserOutputDto> responseData;
         try {
             //数据验证
             List<String> checkMsgs = new ArrayList<>();
             //验证用户名是否存在
             QueryWrapper<UserEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("username",inputDto.getUsername().trim());
+            queryWrapper.eq("username",inputDto.getUsername().trim());//用于删除字符串的头尾空白符
             queryWrapper.eq("is_delete",false);
             UserEntity userEntity = this.getOne(queryWrapper,false);
             if(userEntity!=null){
@@ -163,12 +150,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             ex.printStackTrace();
             responseData = ResponseData.failure(ex.toString());
         }
-
         return responseData;
     }
 
     @Override
-    public ResponseData <UserOutputDto> update(UserUpdateInputDto inputDto) {
+    public ResponseData<UserOutputDto> update(UserUpdateInputDto inputDto) {
         ResponseData<UserOutputDto> responseData;
         try {
             //数据验证
@@ -216,12 +202,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             ex.printStackTrace();
             responseData = ResponseData.failure(ex.toString());
         }
-
         return responseData;
     }
 
     @Override
-    public ResponseData <Boolean> delete(Integer id) {
+    public ResponseData<Boolean> delete(Integer id) {
         ResponseData<Boolean> responseData;
         try {
             //数据验证
@@ -250,7 +235,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             ex.printStackTrace();
             responseData = ResponseData.failure(ex.toString());
         }
-
         return responseData;
     }
 
@@ -286,7 +270,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
             ex.printStackTrace();
             responseData = ResponseData.failure(ex.toString());
         }
-
         return responseData;
     }
 }

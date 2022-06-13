@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * @auther:张启航Sailling
- * @createDate:2022/6/7/0007 22:43:53
+ * @createDate:2022/6/8/0008 18:36:17
  * @description:用户服务
  **/
 public interface UserService extends IService<UserEntity> {
@@ -24,13 +24,14 @@ public interface UserService extends IService<UserEntity> {
      * @param name
      * @return
      */
-    ResponseData<List<UserOutputDto>> query(Integer pageIndex, Integer pageSize, String username, String name);
+    ResponseData<List<UserOutputDto>> query(Integer pageIndex,Integer pageSize,String username,String name);
 
     /**
      * 查询所有数据
      * @return
      */
     ResponseData<List<UserOutputDto>> queryAll();
+
 
     /**
      * 根据Id获取
@@ -39,12 +40,15 @@ public interface UserService extends IService<UserEntity> {
      */
     ResponseData<UserOutputDto> getById(Integer id);
 
+
     /**
      * 创建
      * @param inputDto
      * @return
      */
     ResponseData<UserOutputDto> create(UserCreateInputDto inputDto);
+
+
 
     /**
      * 更新
@@ -53,11 +57,14 @@ public interface UserService extends IService<UserEntity> {
      */
     ResponseData<UserOutputDto> update(UserUpdateInputDto inputDto);
 
+
+
     /**
      * 删除
      * @param id
      */
     ResponseData<Boolean> delete(Integer id);
+
 
     /**
      * 重置密码
@@ -65,4 +72,6 @@ public interface UserService extends IService<UserEntity> {
      * @return
      */
     ResponseData<Boolean> resetPassord(UserResetPasswordInputDto inputDto);
+
+
 }
