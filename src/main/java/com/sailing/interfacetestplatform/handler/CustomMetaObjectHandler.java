@@ -5,6 +5,7 @@ import com.sailing.interfacetestplatform.entity.UserEntity;
 import com.sailing.interfacetestplatform.util.SessionUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
  * @createDate:2022/6/7/0007 23:51:23
  * @description:拦截创建人、创建时间、更新人、更新时间工具类
  **/
+@Component
 public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Autowired
     SessionUtil sessionUtil;
