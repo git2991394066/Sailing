@@ -3,17 +3,19 @@ package com.sailing.interfacetestplatform.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sailing.interfacetestplatform.dto.common.ResponseData;
+import com.sailing.interfacetestplatform.dto.output.module.ModuleOutputDto;
+import com.sailing.interfacetestplatform.dto.output.task.TaskDetailOutputDto;
 import com.sailing.interfacetestplatform.dto.output.task.TaskOutputDto;
-import com.sailing.interfacetestplatform.entity.TaskEntity;
+import com.sailing.interfacetestplatform.dto.output.testcase.TestCaseOutputDto;
+import com.sailing.interfacetestplatform.dto.output.testsuit.TestSuitDetailOutputDto;
+import com.sailing.interfacetestplatform.entity.*;
 import com.sailing.interfacetestplatform.mapper.TaskMapper;
-import com.sailing.interfacetestplatform.service.EnvironmentService;
-import com.sailing.interfacetestplatform.service.ModuleService;
-import com.sailing.interfacetestplatform.service.ProjectService;
-import com.sailing.interfacetestplatform.service.TaskService;
+import com.sailing.interfacetestplatform.service.*;
 import com.sailing.interfacetestplatform.util.SessionUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,15 +42,18 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, TaskEntity> impleme
     ModuleService moduleService;
 //    @Autowired
 //    InterfaceService interfaceService;
-//    @Autowired
-//    TestCaseService testCaseService;
+    @Autowired
+    @Lazy
+    TestCaseService testCaseService;
 //    @Autowired
 //    TestRecordService testRecordService;
-//    @Autowired
-//    TestSuitService testSuitService;
+    @Autowired
+    @Lazy
+    TestSuitService testSuitService;
 //
-//    @Autowired
-//    TaskModuleService taskModuleService;
+    @Autowired
+    @Lazy
+    TaskModuleService taskModuleService;
 //    @Autowired
 //    TestReportService reportService;
 //    @Autowired
@@ -132,62 +137,62 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, TaskEntity> impleme
         return responseData;
     }
 
-//    @Override
-//    public ResponseData<List<TaskDetailOutputDto>> queryDetailByProjectId(Integer projectId) {
-//        ResponseData<List<TaskDetailOutputDto>> responseData;
-//
-//        if(projectId == null){
-//            responseData = new ResponseData <>();
-//            responseData.setCode(1);
-//            responseData.setMessage("项目ID不能为空");
-//
-//            return responseData;
-//        }
-//
-//        try {
-//            QueryWrapper<TaskEntity> queryWrapper = new QueryWrapper<>();
-//            queryWrapper.eq("project_id", projectId);
-//            queryWrapper.eq("is_delete",false); //只取没有删除的
-//            queryWrapper.eq("is_archive",false); //只取没有归档的
-//            List <TaskEntity> entities = this.list(queryWrapper);
-//            List <TaskDetailOutputDto> outputDtos = entities.stream().map(s -> modelMapper.map(s, TaskDetailOutputDto.class)).collect(Collectors.toList());
-//
-//            //获取任务所有的测试套件
-//            QueryWrapper<TestSuitEntity> testSuitEntityQueryWrapper = new QueryWrapper <>();
-//            testSuitEntityQueryWrapper.eq("project_id", projectId);
-//            testSuitEntityQueryWrapper.eq("is_delete",false); //只取没有删除的
-//            List <TestSuitEntity> testSuitEntities = testSuitService.list(testSuitEntityQueryWrapper);
-//
-//            //获取项目所有的测试用例
-//            QueryWrapper<TestCaseEntity> testCaseEntityQueryWrapper = new QueryWrapper <>();
-//            testCaseEntityQueryWrapper.eq("project_id", projectId);
-//            testCaseEntityQueryWrapper.eq("is_delete",false); //只取没有删除的
-//            List <TestCaseEntity> testCaseEntities = testCaseService.list(testCaseEntityQueryWrapper);
-//
-//            //将测试套件、测试用例归类到任务下去
-//            //遍历所有任务，获取任务下的所有测试套件
-//            outputDtos.stream().forEach(taskDetailOutputDto->{
-//                List<TestSuitEntity> currentTestSuitEntities = testSuitEntities.stream().filter(testSuitEntity->testSuitEntity.getTaskId() == taskDetailOutputDto.getId()).collect(Collectors.toList());
-//                List<TestSuitDetailOutputDto> testSuitDetailOutputDtos = currentTestSuitEntities.stream().map(testSuitEntity->modelMapper.map(testSuitEntity,TestSuitDetailOutputDto.class)).collect(Collectors.toList());
-//                //遍历当前所有测试套件，获取测试套件下的测试用例
-//                testSuitDetailOutputDtos.stream().forEach(testSuitDetailOutputDto->{
-//                    List<TestCaseEntity> currentTestCaseEntities = testCaseEntities.stream().filter(testCaseEntity->testCaseEntity.getTestSuitId() == testSuitDetailOutputDto.getId()).collect(Collectors.toList());
-//                    List<TestCaseOutputDto> testCaseDetailOutputDtos = currentTestCaseEntities.stream().map(testCaseEntity->modelMapper.map(testCaseEntity,TestCaseOutputDto.class)).collect(Collectors.toList());
-//
-//                    testSuitDetailOutputDto.setTestCases(testCaseDetailOutputDtos);
-//                });
-//
-//                taskDetailOutputDto.setTestSuits(testSuitDetailOutputDtos);
-//            });
-//
-//            responseData = ResponseData.success(outputDtos);
-//        }catch (Exception ex){
-//            log.error("操作异常：",ex);
-//            responseData = ResponseData.failure("操作异常："+ex.toString());
-//        }
-//
-//        return responseData;
-//    }
+    @Override
+    public ResponseData<List<TaskDetailOutputDto>> queryDetailByProjectId(Integer projectId) {
+        ResponseData<List<TaskDetailOutputDto>> responseData;
+
+        if(projectId == null){
+            responseData = new ResponseData <>();
+            responseData.setCode(1);
+            responseData.setMessage("项目ID不能为空");
+
+            return responseData;
+        }
+
+        try {
+            QueryWrapper<TaskEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("project_id", projectId);
+            queryWrapper.eq("is_delete",false); //只取没有删除的
+            queryWrapper.eq("is_archive",false); //只取没有归档的
+            List <TaskEntity> entities = this.list(queryWrapper);
+            List <TaskDetailOutputDto> outputDtos = entities.stream().map(s -> modelMapper.map(s, TaskDetailOutputDto.class)).collect(Collectors.toList());
+
+            //获取任务所有的测试套件
+            QueryWrapper<TestSuitEntity> testSuitEntityQueryWrapper = new QueryWrapper <>();
+            testSuitEntityQueryWrapper.eq("project_id", projectId);
+            testSuitEntityQueryWrapper.eq("is_delete",false); //只取没有删除的
+            List <TestSuitEntity> testSuitEntities = testSuitService.list(testSuitEntityQueryWrapper);
+
+            //获取项目所有的测试用例
+            QueryWrapper<TestCaseEntity> testCaseEntityQueryWrapper = new QueryWrapper <>();
+            testCaseEntityQueryWrapper.eq("project_id", projectId);
+            testCaseEntityQueryWrapper.eq("is_delete",false); //只取没有删除的
+            List <TestCaseEntity> testCaseEntities = testCaseService.list(testCaseEntityQueryWrapper);
+
+            //将测试套件、测试用例归类到任务下去
+            //遍历所有任务，获取任务下的所有测试套件
+            outputDtos.stream().forEach(taskDetailOutputDto->{
+                List<TestSuitEntity> currentTestSuitEntities = testSuitEntities.stream().filter(testSuitEntity->testSuitEntity.getTaskId() == taskDetailOutputDto.getId()).collect(Collectors.toList());
+                List<TestSuitDetailOutputDto> testSuitDetailOutputDtos = currentTestSuitEntities.stream().map(testSuitEntity->modelMapper.map(testSuitEntity,TestSuitDetailOutputDto.class)).collect(Collectors.toList());
+                //遍历当前所有测试套件，获取测试套件下的测试用例
+                testSuitDetailOutputDtos.stream().forEach(testSuitDetailOutputDto->{
+                    List<TestCaseEntity> currentTestCaseEntities = testCaseEntities.stream().filter(testCaseEntity->testCaseEntity.getTestSuitId() == testSuitDetailOutputDto.getId()).collect(Collectors.toList());
+                    List<TestCaseOutputDto> testCaseDetailOutputDtos = currentTestCaseEntities.stream().map(testCaseEntity->modelMapper.map(testCaseEntity,TestCaseOutputDto.class)).collect(Collectors.toList());
+
+                    testSuitDetailOutputDto.setTestCases(testCaseDetailOutputDtos);
+                });
+
+                taskDetailOutputDto.setTestSuits(testSuitDetailOutputDtos);
+            });
+
+            responseData = ResponseData.success(outputDtos);
+        }catch (Exception ex){
+            log.error("操作异常：",ex);
+            responseData = ResponseData.failure("操作异常："+ex.toString());
+        }
+
+        return responseData;
+    }
 //
 //    @Override
 //    public ResponseData <TaskOutputDto> getById(Integer id) {
@@ -433,34 +438,34 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, TaskEntity> impleme
 //        return responseData;
 //    }
 //
-//    @Override
-//    public ResponseData<List<ModuleOutputDto>> getModulesByTaskId(Integer taskId) {
-//        ResponseData<List<ModuleOutputDto>> responseData;
-//
-//        try {
-//            QueryWrapper<TaskModuleEntity> taskModuleEntityQueryWrapper = new QueryWrapper<>();
-//            if(taskId != null) {
-//                taskModuleEntityQueryWrapper.eq("task_id", taskId);
-//            }
-//            List <TaskModuleEntity> taskModuleEntities = taskModuleService.list(taskModuleEntityQueryWrapper);
-//            List<Integer> modudleIds = taskModuleEntities.stream().map(s->s.getModuleId()).collect(Collectors.toList());
-//
-//            QueryWrapper<ModuleEntity> moduleEntityQueryWrapper = new QueryWrapper<>();
-//            moduleEntityQueryWrapper.in("id",modudleIds);
-//            moduleEntityQueryWrapper.eq("is_delete",false);
-//            List<ModuleEntity> moduleEntities = moduleService.list(moduleEntityQueryWrapper);
-//
-//            List <ModuleOutputDto> outputDtos = moduleEntities.stream().map(s -> modelMapper.map(s, ModuleOutputDto.class)).collect(Collectors.toList());
-//
-//            responseData = ResponseData.success(outputDtos);
-//        }catch (Exception ex){
-//            log.error("操作异常：",ex);
-//            responseData = ResponseData.failure("操作异常："+ex.toString());
-//        }
-//
-//        return responseData;
-//    }
-//
+    @Override
+    public ResponseData<List<ModuleOutputDto>> getModulesByTaskId(Integer taskId) {
+        ResponseData<List<ModuleOutputDto>> responseData;
+
+        try {
+            QueryWrapper<TaskModuleEntity> taskModuleEntityQueryWrapper = new QueryWrapper<>();
+            if(taskId != null) {
+                taskModuleEntityQueryWrapper.eq("task_id", taskId);
+            }
+            List <TaskModuleEntity> taskModuleEntities = taskModuleService.list(taskModuleEntityQueryWrapper);
+            List<Integer> modudleIds = taskModuleEntities.stream().map(s->s.getModuleId()).collect(Collectors.toList());
+
+            QueryWrapper<ModuleEntity> moduleEntityQueryWrapper = new QueryWrapper<>();
+            moduleEntityQueryWrapper.in("id",modudleIds);
+            moduleEntityQueryWrapper.eq("is_delete",false);
+            List<ModuleEntity> moduleEntities = moduleService.list(moduleEntityQueryWrapper);
+
+            List <ModuleOutputDto> outputDtos = moduleEntities.stream().map(s -> modelMapper.map(s, ModuleOutputDto.class)).collect(Collectors.toList());
+
+            responseData = ResponseData.success(outputDtos);
+        }catch (Exception ex){
+            log.error("操作异常：",ex);
+            responseData = ResponseData.failure("操作异常："+ex.toString());
+        }
+
+        return responseData;
+    }
+
 //    /**
 //     * 运行任务实现，首先快速添加添加测试记录后返回，然后开启线程运行测试任务
 //     * 1、添加测试记录

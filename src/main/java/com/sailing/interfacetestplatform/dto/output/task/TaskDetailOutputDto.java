@@ -1,6 +1,9 @@
 package com.sailing.interfacetestplatform.dto.output.task;
 
+import com.sailing.interfacetestplatform.dto.output.testsuit.TestSuitDetailOutputDto;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @auther:张启航Sailling
@@ -16,6 +19,6 @@ public class TaskDetailOutputDto {
     private Boolean isArchive;
     private Integer archiveId;
     private String archiveName;
-//    private List<TestSuitDetailOutputDto> testSuits;
+    private List<TestSuitDetailOutputDto> testSuits;
 }
 

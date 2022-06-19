@@ -2,6 +2,8 @@ package com.sailing.interfacetestplatform.controller;
 
 import com.sailing.interfacetestplatform.annotation.UserRight;
 import com.sailing.interfacetestplatform.dto.common.ResponseData;
+import com.sailing.interfacetestplatform.dto.output.module.ModuleOutputDto;
+import com.sailing.interfacetestplatform.dto.output.task.TaskDetailOutputDto;
 import com.sailing.interfacetestplatform.dto.output.task.TaskOutputDto;
 import com.sailing.interfacetestplatform.service.TaskService;
 import io.swagger.annotations.Api;
@@ -38,12 +40,12 @@ public class TaskController {
     public ResponseData<List<TaskOutputDto>> queryByProjectId(@RequestParam Integer projectId){
         return taskService.queryByProjectId(projectId);
     }
-//
-//    @ApiOperation(value="查询全部，包含详情", notes="查询全部，包含任务->测试套件->测试用例整个树信息")
-//    @GetMapping("/queryDetailByProjectId")
-//    public ResponseData<List<TaskDetailOutputDto>> queryDetailByProjectId(@RequestParam Integer projectId){
-//        return taskService.queryDetailByProjectId(projectId);
-//    }
+
+    @ApiOperation(value="查询全部，包含详情", notes="查询全部，包含任务->测试套件->测试用例整个树信息")
+    @GetMapping("/queryDetailByProjectId")
+    public ResponseData<List<TaskDetailOutputDto>> queryDetailByProjectId(@RequestParam Integer projectId){
+        return taskService.queryDetailByProjectId(projectId);
+    }
 //
 //    @ApiOperation(value="根据ID获取", notes="根据ID获取")
 //    @GetMapping("/{id}")
@@ -69,11 +71,11 @@ public class TaskController {
 //        return taskService.delete(id);
 //    }
 //
-//    @ApiOperation(value="根据任务ID获取关联模块", notes="根据任务ID获取关联模块")
-//    @GetMapping("/getModulesByTaskId")
-//    public ResponseData<List<ModuleOutputDto>> getModulesByTaskId(@RequestParam Integer taskId){
-//        return taskService.getModulesByTaskId(taskId);
-//    }
+    @ApiOperation(value="根据任务ID获取关联模块", notes="根据任务ID获取关联模块")
+    @GetMapping("/getModulesByTaskId")
+    public ResponseData<List<ModuleOutputDto>> getModulesByTaskId(@RequestParam Integer taskId){
+        return taskService.getModulesByTaskId(taskId);
+    }
 //
 //    @ApiOperation(value="运行任务", notes="运行任务")
 //    @PostMapping("/run")

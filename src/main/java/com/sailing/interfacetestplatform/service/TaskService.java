@@ -2,6 +2,8 @@ package com.sailing.interfacetestplatform.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sailing.interfacetestplatform.dto.common.ResponseData;
+import com.sailing.interfacetestplatform.dto.output.module.ModuleOutputDto;
+import com.sailing.interfacetestplatform.dto.output.task.TaskDetailOutputDto;
 import com.sailing.interfacetestplatform.dto.output.task.TaskOutputDto;
 import com.sailing.interfacetestplatform.entity.TaskEntity;
 
@@ -28,11 +30,11 @@ public interface TaskService extends IService<TaskEntity> {
      */
     ResponseData<List<TaskOutputDto>> queryByProjectId(Integer projectId);
 
-//    /**
-//     * 查询全部，包含详情
-//     * @return
-//     */
-//    ResponseData<List<TaskDetailOutputDto>> queryDetailByProjectId(Integer projectId);
+    /**
+     * 查询全部，包含详情
+     * @return
+     */
+    ResponseData<List<TaskDetailOutputDto>> queryDetailByProjectId(Integer projectId);
 //
 //    /**
 //     * 根据id获取
@@ -62,12 +64,12 @@ public interface TaskService extends IService<TaskEntity> {
 //     */
 //    ResponseData<Boolean> delete(Integer id);
 //
-//    /**
-//     * 根据任务ID获取关联模块
-//     * @param taskId
-//     * @return
-//     */
-//    ResponseData<List<ModuleOutputDto>> getModulesByTaskId(Integer taskId);
+    /**
+     * 根据任务ID获取关联模块
+     * @param taskId
+     * @return
+     */
+    ResponseData<List<ModuleOutputDto>> getModulesByTaskId(Integer taskId);
 //
 //    /**
 //     * 运行任务
