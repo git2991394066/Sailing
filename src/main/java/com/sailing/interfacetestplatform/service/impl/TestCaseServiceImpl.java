@@ -34,6 +34,7 @@ public class TestCaseServiceImpl extends ServiceImpl<TestCaseMapper, TestCaseEnt
     @Autowired
     ModelMapper modelMapper;
     @Autowired
+    @Lazy
     InterfaceService interfaceService;
     @Autowired
     @Lazy

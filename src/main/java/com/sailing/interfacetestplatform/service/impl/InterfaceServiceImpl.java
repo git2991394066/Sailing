@@ -12,12 +12,15 @@ import com.sailing.interfacetestplatform.dto.output.interf.InterfaceQueryOutputD
 import com.sailing.interfacetestplatform.dto.output.module.ModuleOutputDto;
 import com.sailing.interfacetestplatform.entity.InterfaceEntity;
 import com.sailing.interfacetestplatform.entity.ModuleEntity;
+import com.sailing.interfacetestplatform.entity.TestCaseEntity;
 import com.sailing.interfacetestplatform.mapper.InterfaceMapper;
 import com.sailing.interfacetestplatform.service.InterfaceService;
 import com.sailing.interfacetestplatform.service.ModuleService;
 import com.sailing.interfacetestplatform.service.ProjectService;
+import com.sailing.interfacetestplatform.service.TestCaseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,8 +40,9 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceMapper, Interface
     ModuleService moduleService;
     @Autowired
     ProjectService projectService;
-//    @Autowired
-//    TestCaseService testCaseService;
+    @Autowired
+    @Lazy
+    TestCaseService testCaseService;
 
     @Override
     public ResponseData<List<InterfaceQueryOutputDto>> query(Integer pageIndex, Integer pageSize, Integer moduleId, Integer projectId) {
@@ -246,47 +250,46 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceMapper, Interface
 
     @Override
     public ResponseData<Boolean> delete(Integer id) {
-//        ResponseData<Boolean> responseData;
-//
-//        try {
-//            //数据验证
-//            List<String> checkMsgs = new ArrayList <>();
-//            //项目名称是否存在
-//            QueryWrapper<InterfaceEntity> queryWrapper = new QueryWrapper<>();
-//            queryWrapper.eq("id",id);
-//            queryWrapper.eq("is_delete",false);
-//            InterfaceEntity interfaceEntity = this.getOne(queryWrapper,false);
-//            if (interfaceEntity!=null) {
-//                QueryWrapper<TestCaseEntity> testCaseEntityQueryWrapper = new QueryWrapper<>();
-//                testCaseEntityQueryWrapper.eq("interface_id",id);
-//                testCaseEntityQueryWrapper.eq("is_delete",false);
-//                List<TestCaseEntity> testCaseEntities = testCaseService.list(testCaseEntityQueryWrapper);
-//                if(testCaseEntities!=null && testCaseEntities.size()>0){
-//                    checkMsgs.add("接口已经在测试套件的用例中被引用，不能删除");
-//                }
-//            }else {
-//                checkMsgs.add("接口不存在");
-//            }
-//            if(checkMsgs.size()>0){
-//                responseData = new ResponseData <>();
-//                responseData.setCode(1);
-//                responseData.setMessage(checkMsgs.stream().collect(Collectors.joining(",")));
-//
-//                return responseData;
-//            }
-//
-//            //修改状态
-//            interfaceEntity.setIsDelete(true);
-//            Boolean result = this.updateById(interfaceEntity);
-//
-//            responseData = ResponseData.success(result);
-//        }catch (Exception ex){
-//            log.error("操作异常：",ex);
-//            responseData = ResponseData.failure("操作异常："+ex.toString());
-//        }
-//
-//        return responseData;
-        return null;
+        ResponseData<Boolean> responseData;
+
+        try {
+            //数据验证
+            List<String> checkMsgs = new ArrayList <>();
+            //项目名称是否存在
+            QueryWrapper<InterfaceEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("id",id);
+            queryWrapper.eq("is_delete",false);
+            InterfaceEntity interfaceEntity = this.getOne(queryWrapper,false);
+            if (interfaceEntity!=null) {
+                QueryWrapper<TestCaseEntity> testCaseEntityQueryWrapper = new QueryWrapper<>();
+                testCaseEntityQueryWrapper.eq("interface_id",id);
+                testCaseEntityQueryWrapper.eq("is_delete",false);
+                List<TestCaseEntity> testCaseEntities = testCaseService.list(testCaseEntityQueryWrapper);
+                if(testCaseEntities!=null && testCaseEntities.size()>0){
+                    checkMsgs.add("接口已经在测试套件的用例中被引用，不能删除");
+                }
+            }else {
+                checkMsgs.add("接口不存在");
+            }
+            if(checkMsgs.size()>0){
+                responseData = new ResponseData <>();
+                responseData.setCode(1);
+                responseData.setMessage(checkMsgs.stream().collect(Collectors.joining(",")));
+
+                return responseData;
+            }
+
+            //修改状态
+            interfaceEntity.setIsDelete(true);
+            Boolean result = this.updateById(interfaceEntity);
+
+            responseData = ResponseData.success(result);
+        }catch (Exception ex){
+            log.error("操作异常：",ex);
+            responseData = ResponseData.failure("操作异常："+ex.toString());
+        }
+
+        return responseData;
     }
 }
 
