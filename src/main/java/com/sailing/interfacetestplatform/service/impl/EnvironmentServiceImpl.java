@@ -6,7 +6,6 @@ import com.sailing.interfacetestplatform.dto.common.ResponseData;
 import com.sailing.interfacetestplatform.dto.input.environment.EnvironmentCreateInputDto;
 import com.sailing.interfacetestplatform.dto.input.environment.EnvironmentUpdateInputDto;
 import com.sailing.interfacetestplatform.dto.output.environment.EnvironmentOutputDto;
-import com.sailing.interfacetestplatform.dto.output.module.ModuleOutputDto;
 import com.sailing.interfacetestplatform.entity.EnvironmentEntity;
 import com.sailing.interfacetestplatform.entity.ProjectEntity;
 import com.sailing.interfacetestplatform.mapper.EnvironmentMapper;
@@ -81,7 +80,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
         try {
             //数据验证
             List<String> checkMsgs = new ArrayList<>();
-            //模块名称是否存在
+            //环境名称是否存在
             QueryWrapper<EnvironmentEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("name", inputDto.getName());
             queryWrapper.eq("project_id",inputDto.getProjectId());
@@ -90,7 +89,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
             if (environmentEntity!=null) {
                 checkMsgs.add("环境名称已经存在");
             }
-            //所属模块是否存在
+            //所属项目是否存在
             QueryWrapper<ProjectEntity> projectQueryWrapper = new QueryWrapper<>();
             projectQueryWrapper.eq("id", inputDto.getProjectId());
             projectQueryWrapper.eq("is_delete", false);
@@ -114,7 +113,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
             //新增
             this.save(entity);
             //Entity转DTO
-            ModuleOutputDto outputDto = modelMapper.map(entity,ModuleOutputDto.class);
+            EnvironmentOutputDto outputDto = modelMapper.map(entity,EnvironmentOutputDto.class);
 
             responseData = ResponseData.success(outputDto);
         }catch (Exception ex){
@@ -132,7 +131,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
         try {
             //数据验证
             List<String> checkMsgs = new ArrayList <>();
-            //模块名称是否存在
+            //环境名称是否存在
             QueryWrapper<EnvironmentEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("name", inputDto.getName());
             queryWrapper.eq("is_delete",false);
@@ -142,7 +141,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
             if (environmentEntity!=null) {
                 checkMsgs.add("环境名称已经存在");
             }
-            //所属模块是否存在
+            //所属项目是否存在
             QueryWrapper<ProjectEntity> projectQueryWrapper = new QueryWrapper<>();
             projectQueryWrapper.eq("id", inputDto.getProjectId());
             projectQueryWrapper.eq("is_delete", false);
@@ -162,10 +161,10 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
             EnvironmentEntity entity = modelMapper.map(inputDto,EnvironmentEntity.class);
             //设置默认值
             entity.setIsDelete(false);
-            //新增
+            //修改
             this.updateById(entity);
             //Entity转DTO
-            ModuleOutputDto outputDto = modelMapper.map(entity,ModuleOutputDto.class);
+            EnvironmentOutputDto outputDto = modelMapper.map(entity,EnvironmentOutputDto.class);
 
             responseData = ResponseData.success(outputDto);
         }catch (Exception ex){
@@ -183,7 +182,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
         try {
             //数据验证
             List<String> checkMsgs = new ArrayList <>();
-            //项目名称是否存在
+            //该项目环境是否存在
             QueryWrapper<EnvironmentEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("id",id);
             queryWrapper.eq("is_delete",false);

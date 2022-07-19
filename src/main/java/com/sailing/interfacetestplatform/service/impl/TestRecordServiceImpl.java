@@ -214,7 +214,7 @@ public class TestRecordServiceImpl extends ServiceImpl<TestRecordMapper, TestRec
             if(existCount<=0){
                 checkMsgs.add("所属项目环境不存在");
             }
-            //所属项目环境是否存在
+tian            //所属任务是否存在
             QueryWrapper<TaskEntity> taskEntityQueryWrapper = new QueryWrapper<>();
             taskEntityQueryWrapper.eq("id", inputDto.getTaskId());
             taskEntityQueryWrapper.eq("is_delete", false);

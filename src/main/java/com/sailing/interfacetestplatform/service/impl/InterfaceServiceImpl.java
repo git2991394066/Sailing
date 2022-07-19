@@ -255,7 +255,7 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceMapper, Interface
         try {
             //数据验证
             List<String> checkMsgs = new ArrayList <>();
-            //项目名称是否存在
+            //接口是否存在
             QueryWrapper<InterfaceEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("id",id);
             queryWrapper.eq("is_delete",false);

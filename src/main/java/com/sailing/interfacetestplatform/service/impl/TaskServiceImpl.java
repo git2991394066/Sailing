@@ -97,7 +97,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, TaskEntity> impleme
             taskModuleEntityQueryWrapper.in("task_id", taskIds);
             List <TaskModuleEntity> taskModuleEntities = taskModuleService.list(taskModuleEntityQueryWrapper);
             List<Integer> modudleIds = taskModuleEntities.stream().map(s->s.getModuleId()).collect(Collectors.toList());
-            //获取所有关联模块详情
+            //获取所有关联模块详情，只获取未被删除的模块
             QueryWrapper<ModuleEntity> moduleEntityQueryWrapper = new QueryWrapper<>();
             moduleEntityQueryWrapper.in("id",modudleIds);
             moduleEntityQueryWrapper.eq("is_delete",false);
@@ -389,6 +389,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, TaskEntity> impleme
                     newTaskModuleEntities.add(taskModuleEntity);
                 }
                 if(newTaskModuleEntities.size()>0){
+                    //mybatis-plus多条sql一次提交
                     taskModuleService.saveBatch(newTaskModuleEntities);
                 }
             }
