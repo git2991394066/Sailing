@@ -30,9 +30,18 @@ public class RestAssuredUtil {
         //Headers转成RestAssured需要的Map
         Map<String,Object> headersMap = JSONObject.parseObject(headers.isEmpty()?"{}":headers,Map.class);
         Response response = null;
+//        Long responseTimeS=null;
+//        Long responseTimeMs=null;
         switch (method.toLowerCase()){
             case "get":
                 response = given().log().all().headers(headersMap).params(paramsMap).when().get(url).then().log().all().extract().response();
+
+//                //查看响应时间
+//                responseTimeMs = response.time();
+//                System.out.println("Response time in ms using time():"+responseTimeMs);
+//
+//                responseTimeS = response.timeIn(TimeUnit.SECONDS);
+//                System.out.println("Response time in seconds using timeIn():"+responseTimeS);
                 break;
             case "post":
                 response= given().log().all().headers(headersMap).pathParams(paramsMap).params(paramsMap).body(json).when().post(url).then().log().all().extract().response();

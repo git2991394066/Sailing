@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @auther:张启航Sailling
@@ -85,10 +86,21 @@ public class TestCaseController {
         requestData = JSONObject.parseObject(ReplaceUtil.replaceUserName(requestData.toString(),userName));
 
         Response response = RestAssuredUtil.request(requestData);
+        //打印响应时间
+        Long responseTimeMs = response.time();
+        System.out.println("Response time in ms using time():"+responseTimeMs);
+        Long responseTimeS = response.timeIn(TimeUnit.SECONDS);
+        System.out.println("Response time in seconds using timeIn():"+responseTimeS);
+
+
         JSONObject result = new JSONObject();
         result.put("status_code", "200");
         result.put("headers",response.getHeaders());
         result.put("cookies",response.getCookies());
+
+        //把响应时间加入运行结果
+        result.put("responseTimeMs",response.time());
+        result.put("responseTimeS",response.timeIn(TimeUnit.SECONDS));
         try {
             result.put("json", response.jsonPath().get());
         }catch (Exception ex){
