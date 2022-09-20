@@ -86,11 +86,11 @@ public class TestCaseController {
         requestData = JSONObject.parseObject(ReplaceUtil.replaceUserName(requestData.toString(),userName));
 
         Response response = RestAssuredUtil.request(requestData);
-        //打印响应时间
-        Long responseTimeMs = response.time();
-        System.out.println("Response time in ms using time():"+responseTimeMs);
-        Long responseTimeS = response.timeIn(TimeUnit.SECONDS);
-        System.out.println("Response time in seconds using timeIn():"+responseTimeS);
+//        //打印响应时间 v1.0.1
+//        Long responseTimeMs = response.time();
+//        System.out.println("Response time in ms using time():"+responseTimeMs);
+//        Long responseTimeS = response.timeIn(TimeUnit.SECONDS);
+//        System.out.println("Response time in seconds using timeIn():"+responseTimeS);
 
 
         JSONObject result = new JSONObject();
@@ -98,9 +98,11 @@ public class TestCaseController {
         result.put("headers",response.getHeaders());
         result.put("cookies",response.getCookies());
 
-        //把响应时间加入运行结果
+        //把响应时间加入运行结果 v1.0.1
         result.put("responseTimeMs",response.time());
         result.put("responseTimeS",response.timeIn(TimeUnit.SECONDS));
+
+
         try {
             result.put("json", response.jsonPath().get());
         }catch (Exception ex){

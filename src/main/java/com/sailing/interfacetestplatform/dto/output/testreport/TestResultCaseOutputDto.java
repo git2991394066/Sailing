@@ -57,5 +57,11 @@ public class TestResultCaseOutputDto implements Serializable {
      * 数据库断言
      */
     private List<TestResultCaseCommonDto> dbAsserts;
+
+    /**
+     * v1.0.1增加记录自定义字段，便于增加用例响应时间和大小的字段
+     */
+    private String userDefinedResponse;
+
 }
 

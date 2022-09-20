@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -92,6 +93,7 @@ public class TaskTestService {
             InterfaceEntity currentInterfaceEntity = interfaceEntities.stream().filter(s->s.getId() == testCaseEntity.getInterfaceId()).findFirst().orElse(null);
             if(currentInterfaceEntity!=null){
                 //对测试用例进行测试
+                //v1.0.1 用例响应时间在testResultCaseOutputDto的responseData下
                 TestResultCaseOutputDto testResultCaseOutputDto = this.testCase(environmentEntity,currentInterfaceEntity,testCaseEntity,testRecordEntity);
 
                 testResultCaseOutputDtos.add(testResultCaseOutputDto);
@@ -124,7 +126,7 @@ public class TaskTestService {
         testResultOutputDto.setTotalOfTestCaseForFailure(testResultCaseOutputDtos.stream().filter(s->s.getStatus().intValue() == 1).count());
         //异常用例数
         testResultOutputDto.setTotalOfTestCaseForError(testResultCaseOutputDtos.stream().filter(s->s.getStatus().intValue() == 2).count());
-        //运行用时
+        //测试任务运行用时
         double totalDuration = testResultCaseOutputDtos.stream().mapToDouble(s -> ((double)(s.getEndTime().getTime()-s.getStartTime().getTime())/1000)).sum();
         testResultOutputDto.setTotalDuration(totalDuration);
         //根据所有用例结果判断测试是否成功
@@ -158,6 +160,7 @@ public class TaskTestService {
                 testResultSuitOutputDto.setTestSuitName(testSuitEntity.getName());
 
                 //获取关联测试用例测试结果
+                //todo  每个测试用例增加响应时间查看  用例响应时间在testResultCaseOutputDto的responseData下
                 List<TestResultCaseOutputDto> currentTestResultCaseOutputDtos = testResultCaseOutputDtos.stream().filter(s->s.getTestCase().getTestSuitId().intValue() == testSuitEntity.getId()).collect(Collectors.toList());
                 testResultSuitOutputDto.setTestCaseResults(currentTestResultCaseOutputDtos);
 
@@ -232,6 +235,18 @@ public class TaskTestService {
             responseData.put("headers",response.getHeaders());
             responseData.put("cookies",response.getCookies());
             responseData.put("json",requestData.get("method").toString().equalsIgnoreCase("delete")==false?response.jsonPath().get():"{}");
+
+//            //查看响应时间 v1.0.1
+//            Long responseTimeMs = response.time();
+//            System.out.println("Response time in ms using time():"+responseTimeMs);
+//            Long responseTimeS = response.timeIn(TimeUnit.SECONDS);
+//            System.out.println("Response time in seconds using timeIn():"+responseTimeS);
+            //把响应时间加入运行结果 v1.0.1
+            responseData.put("responseTimeMs",response.time());
+            responseData.put("responseTimeS",response.timeIn(TimeUnit.SECONDS));
+            testResultCaseOutputDto.setUserDefinedResponse(responseData.toString());
+
+
             testResultCaseOutputDto.setStatus(0);
             //5、获取RestAssured调用响应输出流
             testResultCaseOutputDto.setResponseData(byteArrayOutputStream.toString("utf-8"));
