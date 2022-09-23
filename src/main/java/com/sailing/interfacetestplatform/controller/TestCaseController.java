@@ -86,11 +86,19 @@ public class TestCaseController {
         requestData = JSONObject.parseObject(ReplaceUtil.replaceUserName(requestData.toString(),userName));
 
         Response response = RestAssuredUtil.request(requestData);
-//        //打印响应时间 v1.0.1
+//        //打印响应时间和响应大小 v1.0.1
 //        Long responseTimeMs = response.time();
 //        System.out.println("Response time in ms using time():"+responseTimeMs);
 //        Long responseTimeS = response.timeIn(TimeUnit.SECONDS);
 //        System.out.println("Response time in seconds using timeIn():"+responseTimeS);
+
+//        //v1.0.1计算响应对象大小
+//        Long sizeOfResponse= SizeOfObjectUtil.sizeOf(response);
+//        System.out.println("响应大小为"+sizeOfResponse);
+
+        if(response.getHeader("Content-Length")!=null){
+        Long contentLength=Long.parseLong(response.getHeader("Content-Length"));
+        System.out.println("Response Content-Length:"+contentLength);}
 
 
         JSONObject result = new JSONObject();
@@ -98,9 +106,11 @@ public class TestCaseController {
         result.put("headers",response.getHeaders());
         result.put("cookies",response.getCookies());
 
-        //把响应时间加入运行结果 v1.0.1
+        //把响应时间和大小加入运行结果 v1.0.1
         result.put("responseTimeMs",response.time());
         result.put("responseTimeS",response.timeIn(TimeUnit.SECONDS));
+        if(response.getHeader("Content-Length")!=null){
+        result.put("contentLength",Long.parseLong(response.getHeader("Content-Length")));}
 
 
         try {

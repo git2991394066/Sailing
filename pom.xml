@@ -154,6 +154,15 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.58</version>
         </dependency>
+        <!--引入自定义计算对象长度的jar包-->
+        <dependency>
+            <groupId>com.sailing</groupId>     <!-- 自定义即可 -->
+            <artifactId>SizeOfObjectUtil</artifactId>    <!-- jar名称 -->
+            <version>1.0-SNAPSHOT</version>          <!-- 如果jar包未指定自定义即可-->
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/SizeOfObjectUtil.jar</systemPath>    <!-- 使用jar所在的绝对路径 -->
+        </dependency>
     </dependencies>
 
     <build>

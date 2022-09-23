@@ -23,6 +23,11 @@ public class TestReportEntity implements Serializable {
     private Boolean isDelete;
     private Integer testRecordId;
     private Integer projectId;
+//    v1.0.1待定，不好循环提取
+//    /**
+//     * v1.0.1增加记录自定义字段，便于增加用例响应时间和大小的字段
+//     */
+//    private String userDefinedResponse;
 
     private Integer createById;
     private String createByName;

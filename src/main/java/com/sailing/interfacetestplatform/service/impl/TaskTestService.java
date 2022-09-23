@@ -85,6 +85,7 @@ public class TaskTestService {
         PrintStream printStream = new PrintStream(byteArrayOutputStream);
         RestAssured.config = RestAssured.config().logConfig(LogConfig.logConfig().defaultStream(printStream));
 
+
         //2、对测试用例按照优先级列排序
         testCaseEntities = testCaseEntities.stream().sorted(Comparator.comparing(TestCaseEntity::getOrderIndex)).collect(Collectors.toList());
         //按优先顺序执行用例
@@ -184,6 +185,9 @@ public class TaskTestService {
         testReportEntity.setUpdateById(userEntity.getId());
         testReportEntity.setUpdateByName(userEntity.getName());
         testReportEntity.setUpdateTime(current);
+
+        //v1.0.1待定，不好循环提取
+        // testReportEntity.setUserDefinedResponse();
         testReportService.save(testReportEntity);
 
         //7、修改测试记录的状态为完成
