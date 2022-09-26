@@ -100,21 +100,21 @@ public class TestCaseController {
 //        Long contentLength=Long.parseLong(response.getHeader("Content-Length"));
 //        System.out.println("Response Content-Length:"+contentLength);}
 
-        //调试计算对象大小
-        class ObjectA {
-            byte b1; // 1
-            String str;  // 4
-            int i1; // 4
+//        //调试计算对象大小
+//        class ObjectA {
+//            byte b1; // 1
+//            String str;  // 4
+//            int i1; // 4
 //            byte b2; // 1
 //            int i2;  // 4
 //            byte b3;  // 1
 //            long l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,l20;//8
-        }
+//        }
+//        System.out.println("调试对象大小为:"+RamUsageEstimator.sizeOf(new ObjectA())+"B 字节");
 //
-//        //Long sizeOfResponse= SizeOfObjectUtil.sizeOf(new ObjectA);
 //        Integer integer = new Integer(10);
-//        System.out.println("响应大小为"+RamUsageEstimator.shallowSizeOf(integer));
-//        System.out.println("调试对象大小为:"+RamUsageEstimator.shallowSizeOf(new ObjectA())+"B 字节");
+//        System.out.println("指定对象本身在堆空间的大小"+RamUsageEstimator.shallowSizeOf(integer));
+
         Long responseBytes=RamUsageEstimator.sizeOf(response.asByteArray());
         System.out.println("响应大小为:"+ responseBytes+"Bytes 字节");
 
