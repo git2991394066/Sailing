@@ -254,6 +254,8 @@ public class TaskTestService {
 //        响应大小有的响应有content-length可以直接取，有些没有这个字段需要自己处理
             Long responseBytes= RamUsageEstimator.sizeOf(response.asByteArray());
             System.out.println("响应大小为:"+ responseBytes+"Bytes 字节");
+            Long responseKB= responseBytes/1024;
+            System.out.println("响应大小为:"+ responseKB+"KB");
 
             //计算指定对象本身在堆空间的大小，单位字节。不是整体大小 //输出24
             System.out.println("指定对象本身在堆空间的大小" + RamUsageEstimator.shallowSizeOf(response));
@@ -261,6 +263,7 @@ public class TaskTestService {
             System.out.println("指定对象及其引用树上的所有对象的综合大小" + RamUsageEstimator.sizeOf(response.asByteArray()));
             //把响应字节数加入运行结果 v1.0.1
             responseData.put("responseBytes",responseBytes);
+            responseData.put("responseKB",responseKB);
             testResultCaseOutputDto.setUserDefinedResponse(responseData.toString());
 
 
