@@ -43,7 +43,7 @@ public class ModulesAndInterfaceSynchronousController {
 
     @ApiOperation(value="不覆盖更新导入swagger中的模块和接口", notes="不覆盖更新导入swagger中的模块和接口")
     @GetMapping("/addSwaggerInterface")
-    public String addSwaggerInterface(@RequestParam String swaggerUrl){
+    public String addSwaggerInterface(@RequestParam String swaggerUrl,Integer projectId){
 
 ///**
 // * 第一步：请求输入的swagger api的完整url，获取返回体
@@ -157,7 +157,7 @@ public class ModulesAndInterfaceSynchronousController {
         /**
          * 第二步 模块同步
          */
-        modulesSynchronousService.addSwaggerModules(modulesName);
+        modulesSynchronousService.addSwaggerModules(modulesName,projectId);
         return responseStr;
 
 

@@ -15,5 +15,5 @@ public interface ModulesSynchronousService extends IService<ModuleEntity> {
     /**
      * 导入swagger内 目前项目不存在的模块
      */
-    ResponseData<Boolean> addSwaggerModules(List<String> modulesName);
+    ResponseData<Boolean> addSwaggerModules(List<String> modulesName,Integer projectId);
 }
