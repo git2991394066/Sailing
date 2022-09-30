@@ -2,6 +2,7 @@ package com.sailing.interfacetestplatform.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sailing.interfacetestplatform.service.InterfacesSynchronousService;
 import com.sailing.interfacetestplatform.service.ModulesSynchronousService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,8 @@ public class ModulesAndInterfaceSynchronousController {
 
     @Autowired
     ModulesSynchronousService modulesSynchronousService;
+    @Autowired
+    InterfacesSynchronousService interfacesSynchronousService;
 //    @Autowired
 //    HttpSession httpSession;
 
@@ -157,7 +160,15 @@ public class ModulesAndInterfaceSynchronousController {
         /**
          * 第二步 模块同步
          */
+        //入参 模块名列表，项目Id
         modulesSynchronousService.addSwaggerModules(modulesName,projectId);
+
+        /**
+         * 第三步 接口同步
+         */
+        //入参 swagger响应体的paths、paths中提取的接口url列表、项目Id
+        interfacesSynchronousService.addSwaggerInterfaces(paths,urls,projectId);
+
         return responseStr;
 
 
