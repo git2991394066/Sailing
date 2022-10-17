@@ -128,18 +128,24 @@ public class ModulesAndInterfaceSynchronousController {
 //        while(sIterator.hasNext()){
 //            Object key=sIterator.next();   //循环遍历每个key
 //            res_data.getString("key");   //获取key里的value
-        //模块
-        JSONArray tags=  responseJson.getJSONArray("tags");//返回结果是列表
-        System.out.println("tags："+tags);
-        //提取所有模块name到列表中
         // 定义一个字符串列表
-        List<String> modulesName=new ArrayList<String>();
-        for (int i = 0; i < tags.size(); i++) {
-            modulesName.add(tags.getJSONObject(i).getString("name"));
+        List<String> modulesName = new ArrayList<String>();
+        //增加判断是否有tags
+        if(responseJson.getJSONArray("tags") != null) {
+            //模块
+            JSONArray tags = responseJson.getJSONArray("tags");//返回结果是列表
+            System.out.println("tags：" + tags);
+            //提取所有模块name到列表中
+//            // 定义一个字符串列表
+//            List<String> modulesName = new ArrayList<String>();
+            for (int i = 0; i < tags.size(); i++) {
+                modulesName.add(tags.getJSONObject(i).getString("name"));
+            }
+            System.out.println("共计有" + tags.size() + "个模块");
+            System.out.println("模块名列表详情为：" + modulesName);
+        }else{
+            modulesName=null;
         }
-        System.out.println("共计有"+tags.size()+"个模块");
-        System.out.println("模块名列表详情为："+modulesName);
-
         //接口
         JSONObject paths=  responseJson.getJSONObject("paths");
         System.out.println("paths："+paths);
@@ -161,7 +167,9 @@ public class ModulesAndInterfaceSynchronousController {
          * 第二步 模块同步
          */
         //入参 模块名列表，项目Id
-        modulesSynchronousService.addSwaggerModules(modulesName,projectId);
+        if(modulesName!=null) {
+            modulesSynchronousService.addSwaggerModules(modulesName, projectId);
+        }
 
         /**
          * 第三步 接口同步

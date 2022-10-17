@@ -1,5 +1,6 @@
 package com.sailing.interfacetestplatform.controller;
 
+import com.sailing.interfacetestplatform.annotation.UserRight;
 import com.sailing.interfacetestplatform.dto.common.ResponseData;
 import com.sailing.interfacetestplatform.dto.input.task.TaskCreateInputDto;
 import com.sailing.interfacetestplatform.dto.input.task.TaskRunInputDto;
