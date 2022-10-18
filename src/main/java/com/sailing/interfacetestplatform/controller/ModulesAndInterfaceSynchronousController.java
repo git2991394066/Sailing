@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auther:张启航Sailling
@@ -117,35 +115,68 @@ public class ModulesAndInterfaceSynchronousController {
         String url = swaggerUrl;
 //      System.out.println("getForObject开始");
         String responseStr = restTemplate.getForObject(swaggerUrl, String.class);
-        System.out.println("getForObject响应:"+responseStr);
+        //System.out.println("getForObject响应:"+responseStr);
 //      System.out.println("getForObject结束");
         //将String转为json
         JSONObject responseJson = JSONObject.parseObject(responseStr);
-        System.out.println("responseJson："+responseJson);
+        //System.out.println("responseJson："+responseJson);
+
 //        循环获取json的key和value
 //        JSONObject res_data=  body.getJSONObject("data")；
 //        Iterator sIterator = res_data.keySet().iterator();
 //        while(sIterator.hasNext()){
 //            Object key=sIterator.next();   //循环遍历每个key
 //            res_data.getString("key");   //获取key里的value
-        // 定义一个字符串列表
-        List<String> modulesName = new ArrayList<String>();
-        //增加判断是否有tags
-        if(responseJson.getJSONArray("tags") != null) {
-            //模块
-            JSONArray tags = responseJson.getJSONArray("tags");//返回结果是列表
-            System.out.println("tags：" + tags);
-            //提取所有模块name到列表中
-//            // 定义一个字符串列表
-//            List<String> modulesName = new ArrayList<String>();
-            for (int i = 0; i < tags.size(); i++) {
-                modulesName.add(tags.getJSONObject(i).getString("name"));
+
+//        // 定义一个字符串列表
+//        List<String> modulesName = new ArrayList<String>();
+//        //增加判断是否有tags
+//        if(responseJson.getJSONArray("tags") != null) {
+//            //模块
+//            JSONArray tags = responseJson.getJSONArray("tags");//返回结果是列表
+//            System.out.println("tags：" + tags);
+//            //提取所有模块name到列表中
+////            // 定义一个字符串列表
+////            List<String> modulesName = new ArrayList<String>();
+//            for (int i = 0; i < tags.size(); i++) {
+//                modulesName.add(tags.getJSONObject(i).getString("name"));
+//            }
+//            System.out.println("共计有" + tags.size() + "个模块");
+//            System.out.println("模块名列表详情为：" + modulesName);
+//        }else{
+//            modulesName=null;
+//        }
+
+        //模块
+        //调整获取模块名的方案，由tags列表循环获取改为从paths.接口url.请求方法.tags[0]中获取
+        // 定义一个字符串集合，提取模块名称并存储不重复的项
+        Set<String> modulesNameSet = new HashSet<String>();
+        JSONObject paths1=  responseJson.getJSONObject("paths");
+        // 获取urls列表当作key值
+        List<String> urls1=new ArrayList<String>();
+        urls1=getJsonFirstFloorKey(paths1);
+        for(int i=0;i<urls1.size();i++){
+            //获取urls中的请求响应信息
+            JSONObject requestAndResponse=  paths1.getJSONObject(urls1.get(i));
+            //获取请求方法列表当作key值
+            List<String> methods=new ArrayList<String>();
+            methods=getJsonFirstFloorKey(requestAndResponse);
+            for(int j=0;j<methods.size();j++){
+                //获取请求方法中的请求响应信息
+                JSONObject requestAndResponseInMethods=  requestAndResponse.getJSONObject(methods.get(j));
+                //模块
+                JSONArray tags = requestAndResponseInMethods.getJSONArray("tags");//返回结果是列表
+                modulesNameSet.add((String) tags.get(0));
             }
-            System.out.println("共计有" + tags.size() + "个模块");
-            System.out.println("模块名列表详情为：" + modulesName);
-        }else{
-            modulesName=null;
+
         }
+//        System.out.println("共计有" + modulesNameSet.size() + "个模块");
+//        System.out.println("模块名列表详情集合为：" + modulesNameSet);
+        // 定义一个字符串列表，存放模块名称，把集合转为列表，方便后续接口使用
+        List<String> modulesName = new ArrayList<String>(modulesNameSet);
+        System.out.println("模块名列表详情列表为：" + modulesName);
+        System.out.println("共计有" + modulesName.size() + "个模块");
+
         //接口
         JSONObject paths=  responseJson.getJSONObject("paths");
         System.out.println("paths："+paths);
@@ -195,7 +226,7 @@ public class ModulesAndInterfaceSynchronousController {
 //                    getJsonFirstFloorKey(entry.getValue(),entry.getKey());
 //                }
             }
-            System.out.println("外层是json的所有key列表详情："+firstFloorKeyS);
+            //System.out.println("外层是json的所有key列表详情："+firstFloorKeyS);
 //            System.out.println("外层是json的循环获取json第一层Key结束");
         }
         if(obj instanceof JSONArray){
