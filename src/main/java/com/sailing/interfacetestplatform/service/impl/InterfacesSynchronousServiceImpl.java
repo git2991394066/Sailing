@@ -114,6 +114,7 @@ public class InterfacesSynchronousServiceImpl extends ServiceImpl<InterfaceMappe
         }
         //        4.如果存在则继续遍历此url的请求方式，如果不存在则往接口表中添加url+请求方式的接口数据
         System.out.println("projectId为"+projectId+"的项目不存在的url+请求方式列表为："+nonexistentUrlCombineMethod);
+        System.out.println("projectId为"+projectId+"的项目\n"+"\t不存在的url+请求方式组合共计为："+(nonexistentUrlCombineMethod.size()/2)+"个");
 
 
 
