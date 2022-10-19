@@ -141,15 +141,16 @@ public class InterfaceServiceImpl extends ServiceImpl<InterfaceMapper, Interface
             if (interfaceEntity!=null) {
                 checkMsgs.add("接口名称已经存在");
             }
-            //接口地址是否存在
+            //同项目接口地址+请求方式组合是否存在
             queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("path", inputDto.getPath());
             queryWrapper.eq("is_delete",false);
             queryWrapper.eq("project_id",inputDto.getProjectId());
             queryWrapper.eq("module_id",inputDto.getModuleId());
+            queryWrapper.eq("request_method",inputDto.getRequestMethod());
             interfaceEntity = this.getOne(queryWrapper,false);
             if (interfaceEntity!=null) {
-                checkMsgs.add("接口地址已经存在");
+                checkMsgs.add("同项目接口地址+请求方式组合已存在");
             }
             //所属模块是否存在
             QueryWrapper<ModuleEntity> moduleQueryWrapper = new QueryWrapper<>();

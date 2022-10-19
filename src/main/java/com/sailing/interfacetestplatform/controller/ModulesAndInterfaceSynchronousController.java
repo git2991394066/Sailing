@@ -186,13 +186,9 @@ public class ModulesAndInterfaceSynchronousController {
 //        遍历获取json数据的所有key值
 
         urls=getJsonFirstFloorKey(paths);
-//        Iterator sIterator2 = paths.keySet().iterator();
-//        while(sIterator2.hasNext()){
-//            Object key=sIterator2.next();   //循环遍历每个key
-//            paths.getString("key");   //获取key里的value
-//        }
-        System.out.println("共计有"+urls.size()+"个url");
+
         System.out.println("接口url列表详情为："+urls);
+        System.out.println("共计有"+urls.size()+"个接口url");
 
         /**
          * 第二步 模块同步

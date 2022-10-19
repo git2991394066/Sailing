@@ -61,7 +61,7 @@ public class ModulesSynchronousServiceImpl extends ServiceImpl<ModuleMapper, Mod
     //循环取出传入的模块名列表中的模块名 是否  和项目is_delete=0状态下的模块名 有重复；不重复就添加此模块到数据库中，重复的话就继续循环。
     @Override
     public ResponseData<Boolean> addSwaggerModules(List<String> modulesName,Integer projectId) {
-        //1.获取所有模块详情，只获取is_delete=0的模块
+        //1.获取所有模块详情，只获取is_delete=0的模块和筛选projectid
         QueryWrapper<ModuleEntity> moduleEntityQueryWrapper = new QueryWrapper<>();
         moduleEntityQueryWrapper.eq("project_id",projectId);
         moduleEntityQueryWrapper.eq("is_delete",false);
